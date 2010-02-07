@@ -1,0 +1,16 @@
+<h1>Editing testsuite</h1>
+
+<% form_for(@testsuite) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :details %><br />
+    <%= f.text_area :details %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @testsuite %> |
+<%= link_to 'Back', testsuites_path %>

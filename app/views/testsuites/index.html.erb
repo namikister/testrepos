@@ -1,0 +1,20 @@
+<h1>Listing testsuites</h1>
+
+<table>
+  <tr>
+    <th>Details</th>
+  </tr>
+
+<% @testsuites.each do |testsuite| %>
+  <tr>
+    <td><%=h testsuite.details %></td>
+    <td><%= link_to 'Show', testsuite %></td>
+    <td><%= link_to 'Edit', edit_testsuite_path(testsuite) %></td>
+    <td><%= link_to 'Destroy', testsuite, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New testsuite', new_testsuite_path %>

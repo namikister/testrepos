@@ -1,0 +1,27 @@
+<h1>Listing testprojects</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Notes</th>
+  </tr>
+
+<% @testprojects.each do |testproject| %>
+  <tr>
+    <% if testproject.node != nil %>
+    <td><%= testproject.node.name %></td>
+    <td><%= testproject.notes %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<div id="treeDiv"></div>
+
+<script type="text/javascript">
+Ext.onReady(makeTree);
+</script>
+
+<br />
+
+<%= link_to 'New testproject', new_testproject_path %>

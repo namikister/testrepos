@@ -1,0 +1,15 @@
+<h1>New testproject</h1>
+
+<% form_for(@testproject) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', testprojects_path %>

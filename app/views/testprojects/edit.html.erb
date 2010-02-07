@@ -1,0 +1,16 @@
+<h1>Editing testproject</h1>
+
+<% form_for(@testproject) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @testproject %> |
+<%= link_to 'Back', testprojects_path %>
