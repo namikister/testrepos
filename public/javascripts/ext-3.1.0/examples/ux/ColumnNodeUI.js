@@ -20,19 +20,19 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
     cellSelectorMaxDepth : 4,
     cellClass : 'x-tree-hd',
     enableColumnResize : true,
+    scrollOffset : undefined,
+    minColumnWidth : 25,
 
     onRender : function(){
         Ext.tree.ColumnTree.superclass.onRender.apply(this, arguments);
         this.headers = this.header.createChild({cls:'x-tree-headers'});
 
         var cols = this.columns, c;
-        var totalWidth = 0;
         var scrollOffset = 19; // similar to Ext.grid.GridView default
 
         for(var i = 0, len = cols.length; i < len; i++){
              c = cols[i];
-             totalWidth += c.width;
-             this.headers.createChild({
+             var node = this.headers.createChild({
                  cls:'x-tree-hd ' + (c.cls?c.cls+'-hd':''),
                  cn: {
                      cls:'x-tree-hd-text',
@@ -40,12 +40,13 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
                  },
                  style:'width:'+(c.width-this.borderWidth)+'px;'
              });
+            c.id = node.id;
         }
         this.headers.createChild({cls:'x-clear'});
         // prevent floats from wrapping when clipped
 //        this.headers.setWidth(totalWidth+scrollOffset);
-        this.headers.setWidth(totalWidth);
-        this.innerCt.setWidth(totalWidth);
+        this.headers.setWidth(this.getOffsetWidth());
+        this.innerCt.setWidth(this.getTotalWidth());
 
         this.headers.on({
             scope: this,
@@ -77,10 +78,27 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
 
     setColumnWidth : function(index, width, suppressEvent){
         this.columns[index].width = width;
-        this.totalWidth = null;
         if(!suppressEvent){
              this.fireEvent("widthchange", this, index, width);
         }
+    },
+
+    getTotalWidth : function(includeHidden){
+        var totalWidth = 0;
+        for(var i = 0, len = this.columns.length; i < len; i++){
+            if(includeHidden || !this.isHidden(i)){
+                totalWidth += this.getColumnWidth(i);
+            }
+        }
+        return totalWidth;
+    },
+
+    getOffsetWidth : function() {
+        return (this.getTotalWidth() + this.getScrollOffset()) + 'px';
+    },
+
+    getScrollOffset: function(){
+        return Ext.num(this.scrollOffset, Ext.getScrollBarWidth());
     },
 
     // private
@@ -116,13 +134,20 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
     // private
     getCellIndex : function(el){
         if(el){
-            var m = el.className.match(this.colRe);
-            if(m && m[1]){
-                return this.cm.getIndexById(m[1]);
-            }
+            return this.getIndexById(el.id);
         }
         return false;
     },
+
+    getIndexById : function(id){
+        for(var i = 0, len = this.columns.length; i < len; i++){
+            if(this.columns[i].id == id){
+                return i;
+            }
+        }
+        return -1;
+    },
+
     // private
     handleHdOver : function(e, t){
         var hd = this.findHeaderCell(t);
@@ -160,24 +185,16 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         }
     },
     // private
-    updateColumnWidth : function(index, width){
-        var w = this.getColumnWidth(index);
-        var tw = this.getTotalWidth();
-        this.innerHd.firstChild.style.width = this.getOffsetWidth();
-        this.innerHd.firstChild.firstChild.style.width = tw;
-        this.mainBody.dom.style.width = tw;
+    updateColumnWidth : function(index){
+        var w  = this.getColumnWidth(index),
+            ow = this.getOffsetWidth(),
+            tw = this.getTotalWidth();
+        this.headers.setWidth(ow);
+        this.innerCt.setWidth(tw);
         var hd = this.getHeaderCell(index);
-        hd.style.width = w;
+        hd.style.width = w + "px";
 
-        var ns = this.getRows(), row;
-        for(var i = 0, len = ns.length; i < len; i++){
-            row = ns[i];
-            row.style.width = tw;
-            if(row.firstChild){
-                row.firstChild.style.width = tw;
-                row.firstChild.rows[0].childNodes[index].style.width = w;
-            }
-        }
+        this.setWidthAllNodes(index, w);
 
         this.onColumnWidthUpdated(index, w, tw);
     },
@@ -188,7 +205,7 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         this.userResized = true;
         this.setColumnWidth(i, w, true);
 
-//        this.updateColumnWidth(i, w);
+        this.updateColumnWidth(i);
         // if(this.forceFit){
         //     this.fitColumns(true, false, i);
         //     this.updateAllColumnWidths();
@@ -199,6 +216,25 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
 
         this.fireEvent('columnresize', i, w);
     },
+
+    setWidthAllNodes : function(index, width) {
+        var i = index,
+            w = width - this.borderWidth,
+            root = this.getRootNode();
+        this.doAllNodes(root,
+                        function(node) {
+                            node.ui.elNode.children[i].style.width = w + "px";
+                        });
+    },
+
+    doAllNodes : function(node, doFunc){
+        var cs = node.childNodes;
+        for(var i = 0, len = cs.length; i < len; i++) {
+            doFunc(cs[i]);
+            this.doAllNodes(cs[i], doFunc);
+        }
+    },
+
 });
 
 Ext.reg('columntree', Ext.ux.tree.ColumnTree);
@@ -247,8 +283,7 @@ Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
             "</li>");
 
         if(bulkRender !== true && n.nextSibling && n.nextSibling.ui.getEl()){
-            this.wrap = Ext.DomHelper.insertHtml("beforeBegin",
-                                n.nextSibling.ui.getEl(), buf.join(""));
+            this.wrap = Ext.DomHelper.insertHtml("beforeBegin", n.nextSibling.ui.getEl(), buf.join(""));
         }else{
             this.wrap = Ext.DomHelper.insertHtml("beforeEnd", targetNode, buf.join(""));
         }
@@ -257,8 +292,8 @@ Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         this.ctNode = this.wrap.childNodes[1];
         var cs = this.elNode.firstChild.childNodes;
         this.indentNode = cs[0];
-        this.ecNode = cs[1];
-        this.iconNode = cs[2];
+        this.ecNode     = cs[1];
+        this.iconNode   = cs[2];
         var index = 3;
         if(cb){
             this.checkbox = cs[3];
@@ -266,7 +301,7 @@ Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
             this.checkbox.defaultChecked = this.checkbox.checked;
             index++;
         }
-        this.anchor = cs[index];
+        this.anchor   = cs[index];
         this.textNode = cs[index].firstChild;
     }
 });
