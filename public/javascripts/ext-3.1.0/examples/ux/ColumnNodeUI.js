@@ -19,7 +19,6 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
 
     cellSelectorMaxDepth : 4,
     cellClass : 'x-tree-hd',
-//    colRe : new RegExp('x-tree-hd', ''),
     enableColumnResize : true,
 
     onRender : function(){
@@ -44,7 +43,8 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         }
         this.headers.createChild({cls:'x-clear'});
         // prevent floats from wrapping when clipped
-        this.headers.setWidth(totalWidth+scrollOffset);
+//        this.headers.setWidth(totalWidth+scrollOffset);
+        this.headers.setWidth(totalWidth);
         this.innerCt.setWidth(totalWidth);
 
         this.headers.on({
@@ -58,6 +58,31 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         this.resizeProxy  = this.header.createChild({cls:'x-grid3-resize-proxy'});
         this.splitZone = new Ext.ux.tree.ColumnTree.SplitDragZone(this, this.headers.dom);
     },
+
+    isHidden : function(index){
+        return !!this.columns[index].hidden; // ensure returns boolean
+    },
+
+    isFixed : function(index){
+        return !!this.columns[index].fixed;
+    },
+
+    isResizable : function(index){
+        return index >= 0 && this.columns[index].resizable !== false && this.columns[index].fixed !== true;
+    },
+
+    getColumnWidth : function(index){
+        return this.columns[index].width;
+    },
+
+    setColumnWidth : function(index, width, suppressEvent){
+        this.columns[index].width = width;
+        this.totalWidth = null;
+        if(!suppressEvent){
+             this.fireEvent("widthchange", this, index, width);
+        }
+    },
+
     // private
     fly : function(el){
         if(!this._flyweight){
@@ -80,12 +105,12 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         return cell && this.fly(cell).hasClass(this.cellClass) ? cell : null;
     },
 
-    findCellIndex : function(el, requiredCls){
-        var cell = this.findCell(el);
-        if(cell && (!requiredCls || this.fly(cell).hasClass(requiredCls))){
-            return this.getCellIndex(cell);
-        }
-        return false;
+    getHeaderCells : function(){
+      return this.headers.dom.getElementsByClassName(this.cellClass);
+    },
+
+    getHeaderCell : function(index){
+      return this.getHeaderCells()[index];
     },
 
     // private
@@ -133,6 +158,46 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
             this.activeHdRef = null;
             hd.style.cursor = '';
         }
+    },
+    // private
+    updateColumnWidth : function(index, width){
+        var w = this.getColumnWidth(index);
+        var tw = this.getTotalWidth();
+        this.innerHd.firstChild.style.width = this.getOffsetWidth();
+        this.innerHd.firstChild.firstChild.style.width = tw;
+        this.mainBody.dom.style.width = tw;
+        var hd = this.getHeaderCell(index);
+        hd.style.width = w;
+
+        var ns = this.getRows(), row;
+        for(var i = 0, len = ns.length; i < len; i++){
+            row = ns[i];
+            row.style.width = tw;
+            if(row.firstChild){
+                row.firstChild.style.width = tw;
+                row.firstChild.rows[0].childNodes[index].style.width = w;
+            }
+        }
+
+        this.onColumnWidthUpdated(index, w, tw);
+    },
+    onColumnWidthUpdated : function(index, w, tw){
+        //template method
+    },
+    onColumnSplitterMoved : function(i, w){
+        this.userResized = true;
+        this.setColumnWidth(i, w, true);
+
+//        this.updateColumnWidth(i, w);
+        // if(this.forceFit){
+        //     this.fitColumns(true, false, i);
+        //     this.updateAllColumnWidths();
+        // }else{
+        //     this.updateColumnWidth(i, w);
+        //     this.syncHeaderScroll();
+        // }
+
+        this.fireEvent('columnresize', i, w);
     },
 });
 
@@ -226,12 +291,12 @@ Ext.extend(Ext.ux.tree.ColumnTree.SplitDragZone, Ext.dd.DDProxy, {
 
     b4StartDrag : function(x, y){
         this.tree.headersDisabled = true;
-        var h = this.mainWrap.getHeight();
+        var h = this.tree.getHeight();
         this.marker.setHeight(h);
         this.marker.show();
         this.marker.alignTo(this.tree.getHeaderCell(this.cellIndex), 'tl-tl', [-2, 0]);
         this.proxy.setHeight(h);
-        var w = this.cm.getColumnWidth(this.cellIndex);
+        var w = this.tree.getColumnWidth(this.cellIndex);
         var minw = Math.max(w-this.tree.minColumnWidth, 0);
         this.resetConstraints();
         this.setXConstraint(minw, 1000);
@@ -242,14 +307,9 @@ Ext.extend(Ext.ux.tree.ColumnTree.SplitDragZone, Ext.dd.DDProxy, {
         Ext.dd.DDProxy.prototype.b4StartDrag.call(this, x, y);
     },
 
-    allowHeaderDrag : function(e){
-        return true;
-    },
-
-
     handleMouseDown : function(e){
         var t = this.tree.findHeaderCell(e.getTarget());
-        if(t && this.allowHeaderDrag(e)){
+        if(t){
             var xy = this.tree.fly(t).getXY(), x = xy[0], y = xy[1];
             var exy = e.getXY(), ex = exy[0];
             var w = t.offsetWidth, adjust = false;
@@ -259,13 +319,12 @@ Ext.extend(Ext.ux.tree.ColumnTree.SplitDragZone, Ext.dd.DDProxy, {
                 adjust = 0;
             }
             if(adjust !== false){
-                this.cm = this.tree.colModel;
                 var ci = this.tree.getCellIndex(t);
                 if(adjust == -1){
-                  if (ci + adjust < 0) {
-                    return;
-                  }
-                    while(this.cm.isHidden(ci+adjust)){
+                    if (ci + adjust < 0) {
+                        return;
+                    }
+                    while(this.tree.isHidden(ci+adjust)){
                         --adjust;
                         if(ci+adjust < 0){
                             return;
@@ -274,12 +333,13 @@ Ext.extend(Ext.ux.tree.ColumnTree.SplitDragZone, Ext.dd.DDProxy, {
                 }
                 this.cellIndex = ci+adjust;
                 this.split = t.dom;
-                if(this.cm.isResizable(this.cellIndex) && !this.cm.isFixed(this.cellIndex)){
+                if(this.tree.isResizable(this.cellIndex) && !this.tree.isFixed(this.cellIndex)){
                     Ext.ux.tree.ColumnTree.SplitDragZone.superclass.handleMouseDown.apply(this, arguments);
                 }
-            }else if(this.columnDrag){
-                this.columnDrag.callHandleMouseDown(e);
             }
+            // else if(this.tree.columnDrag){
+            //     this.tree.columnDrag.callHandleMouseDown(e);
+            // }
         }
     },
 
@@ -287,9 +347,10 @@ Ext.extend(Ext.ux.tree.ColumnTree.SplitDragZone, Ext.dd.DDProxy, {
         this.marker.hide();
         var endX = Math.max(this.minX, e.getPageX());
         var diff = endX - this.startPos;
-        this.tree.onColumnSplitterMoved(this.cellIndex, this.cm.getColumnWidth(this.cellIndex)+diff);
+        var tree = this.tree;
+        tree.onColumnSplitterMoved(this.cellIndex, this.tree.getColumnWidth(this.cellIndex)+diff);
         setTimeout(function(){
-            this.tree.headersDisabled = false;
+            tree.headersDisabled = false;
         }, 50);
     },
 
