@@ -44,7 +44,6 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
         }
         this.headers.createChild({cls:'x-clear'});
         // prevent floats from wrapping when clipped
-//        this.headers.setWidth(totalWidth+scrollOffset);
         this.headers.setWidth(this.getOffsetWidth());
         this.innerCt.setWidth(this.getTotalWidth());
 
@@ -219,9 +218,8 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
 
     setWidthAllNodes : function(index, width) {
         var i = index,
-            w = width - this.borderWidth,
-            root = this.getRootNode();
-        this.doAllNodes(root,
+            w = width - this.borderWidth;
+        this.doAllNodes(this.getRootNode(),
                         function(node) {
                             node.ui.elNode.children[i].style.width = w + "px";
                         });

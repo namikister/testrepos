@@ -5,7 +5,7 @@ class NodesController < ApplicationController
     @children = NodeHierarchy.find(params[:id]).children.find_all_by_node_type_id(types)
     respond_to do |format|
       format.json  { render :layout => false,
-                            :json => @children.map{|node| node.instance.contents} }
+                            :json => @children.map{|node| node.instance.contents(:summary, :steps)} }
     end
   end
 end
