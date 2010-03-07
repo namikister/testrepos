@@ -20,15 +20,16 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
     cellSelectorMaxDepth : 4,
     cellClass : 'x-tree-hd',
     enableColumnResize : true,
-    scrollOffset : undefined,
+    scrollOffset : 19,
     minColumnWidth : 25,
 
     onRender : function(){
         Ext.tree.ColumnTree.superclass.onRender.apply(this, arguments);
-        this.headers = this.header.createChild({cls:'x-tree-headers'});
+        this.headers = this.body.createChild({cls:'x-tree-headers'});
+        this.headers.insertBefore(this.innerCt);
 
         var cols = this.columns, c;
-        var scrollOffset = 19; // similar to Ext.grid.GridView default
+//        var scrollOffset = 19; // similar to Ext.grid.GridView default
 
         for(var i = 0, len = cols.length; i < len; i++){
              c = cols[i];
@@ -54,8 +55,8 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
             mousemove: this.handleHdMove
         });
 
-        this.resizeMarker = this.header.createChild({cls:'x-grid3-resize-marker'});
-        this.resizeProxy  = this.header.createChild({cls:'x-grid3-resize-proxy'});
+        this.resizeMarker = this.headers.createChild({cls:'x-grid3-resize-marker'});
+        this.resizeProxy  = this.headers.createChild({cls:'x-grid3-resize-proxy'});
         this.splitZone = new Ext.ux.tree.ColumnTree.SplitDragZone(this, this.headers.dom);
     },
 
@@ -246,8 +247,7 @@ Ext.tree.ColumnTree = Ext.ux.tree.ColumnTree;
  * @extends Ext.tree.TreeNodeUI
  */
 Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
-    focus: Ext.emptyFn, // prevent odd scrolling behavior
-
+//    focus: Ext.emptyFn, // prevent odd scrolling behavior
     renderElements : function(n, a, targetNode, bulkRender){
         this.indentMarkup = n.parentNode ? n.parentNode.ui.getChildIndent() : '';
 
