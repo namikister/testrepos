@@ -6,6 +6,7 @@ module MenuHelper
            {:name => "result",        :url => {:controller => 'testprojects', :action => "index"}},
           ]
   def render_main_menu(selected)
+    logger.warn("render_main_menu")
     links = []
     MENUS.each do |item|
       label = item[:label] || 'label_' + item[:name]
