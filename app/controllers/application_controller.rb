@@ -3,6 +3,8 @@
 
 class ApplicationController < ActionController::Base
   include Testrepos::I18n
+  include Testrepos::MenuManager::MenuController
+  helper  Testrepos::MenuManager::MenuHelper
 
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details

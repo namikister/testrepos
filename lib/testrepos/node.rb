@@ -1,6 +1,5 @@
 module Testrepos
   module Node
-
     def contents(*params)
       params |= [:id, :name, :notes]
       obj = {}
@@ -14,6 +13,5 @@ module Testrepos
       obj['type'] = self.node.type
       return obj
     end
-
   end
 end

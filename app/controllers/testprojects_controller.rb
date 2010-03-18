@@ -1,4 +1,6 @@
 class TestprojectsController < ApplicationController
+  menu_item :specification, :only => :index
+  menu_item :result, :only => :show
   # GET /testprojects
   # GET /testprojects.xml
   def index
