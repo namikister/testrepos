@@ -2,12 +2,20 @@
 module ApplicationHelper
   include Testrepos::I18n
 
+  def page_header_title
+    if @testproject.nil? || @testproject.new_record?
+      h(Testrepos::Info.app_name)
+    else
+      h(@testproject.name)
+    end
+  end
+
   def html_title(*args)
     if args.empty?
       title = []
-      title << @project.name if @project
+      title << @testproject.name if @testproject
       title += @html_title if @html_title
-      title << Setting.app_title
+      title << Testrepos::Info.app_name
       title.select {|t| !t.blank? }.join(' - ')
     else
       @html_title ||= []

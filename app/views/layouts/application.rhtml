@@ -5,7 +5,6 @@
 <title><%=h controller.action_name %></title>
 <meta name="description" content="<%# Testrepos::Info.app_name %>" />
 <meta name="keywords" content="issue,bug,tracker" />
-<%= stylesheet_link_tag 'application', :media => 'all' %>
 <%= javascript_include_tag :defaults %>
 <%= javascript_include_tag "ext-3.1.0/adapter/ext/ext-base" %>
 <%= javascript_include_tag "ext-3.1.0/ext-all-debug" %>
@@ -13,6 +12,7 @@
 <%= javascript_include_tag "ext-3.1.0/examples/ux/ColumnNodeUI" %>
 <%= stylesheet_link_tag    "ext-3.1.0/resources/css/ext-all" %>
 <%= stylesheet_link_tag    "ext-3.1.0/examples/ux/css/ColumnNodeUI" %>
+<%= stylesheet_link_tag 'application', :media => 'all' %>
 <%= javascript_include_tag "mylib" %>
 <%= yield :header_tags -%>
 </head>
@@ -27,7 +27,7 @@
 <div id="header">
     <div id="quick-search">
     </div>
-    <h1><%# page_header_title %></h1>
+    <h1><%= page_header_title %></h1>
     <div id="main-menu">
       <%= render_menu :project_menu -%>
     </div>
