@@ -1,0 +1,21 @@
+<div id="treeDiv"></div>
+
+<script type="text/javascript">
+Ext.onReady(makeTree(<%= @testproject.id %>,
+                     [{header:'<%= l(:label_name) %>',
+                       width:200,
+                       dataIndex:'name'
+                      },{
+                       header:'<%= l(:label_summary) %>',
+                       width:200,
+                       dataIndex:'notes'
+                      },{
+                       header:'<%= l(:label_steps) %>',
+                       width:300,
+                       dataIndex:'steps'
+                      },{
+                       header:'<%= l(:label_expected_results) %>',
+                       width:300,
+                       dataIndex:'expected_results'
+                      }]));
+</script>
