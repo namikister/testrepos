@@ -1,6 +1,6 @@
 //Ext.BLANK_IMAGE_URL = '/ext-3.1.0/resources/images/default/s.gif';
 
-function makeTree() {
+var makeTree = function (id, columns) {
     var tree = new Ext.ux.tree.ColumnTree({
         rootVisible:false,
         autoScroll:false,
@@ -10,27 +10,11 @@ function makeTree() {
 //        height: 600,
 //        title: 'Specification',
 
-        columns:[{
-            header:'Name',
-            width:200,
-            dataIndex:'name'
-        },{
-            header:'Notes',
-            width:200,
-            dataIndex:'notes'
-        },{
-            header:'Summary',
-            width:300,
-            dataIndex:'summary'
-        },{
-            header:'Steps',
-            width:300,
-            dataIndex:'steps'
-        }],
+        columns: columns,
 
         loader: new Ext.tree.TreeLoader({
             dataUrl:function(obj){
-                return 'nodes/' + obj.argument.node.id + '/children.json';
+                return '/nodes/' + obj.argument.node.id + '/children.json';
             },
             requestMethod:'GET',
             nodeParameter:'id',
@@ -48,15 +32,15 @@ function makeTree() {
                 if (attr.type == 'Testcase') {
                     attr.leaf = true;
                     attr.cls = 'file';
-                    attr.checked = false;
+                    // attr.checked = false;
                 }
                 return Ext.tree.TreeLoader.prototype.createNode.call(this, attr);
             }
         }),
 
         root: new Ext.tree.AsyncTreeNode({
-            text:'dummy',
-            id:1
+            text: 'dummy',
+            id: id
         })
     });
-}
+};

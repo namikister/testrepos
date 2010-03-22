@@ -1,4 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.home '', :controller => 'home'
+
+  # map.signin 'login', :controller => 'account', :action => 'login'
+  # map.signout 'logout', :controller => 'account', :action => 'logout'
+
+  map.resources :specification
   map.resources :testsuites
   map.resources :testprojects
   map.resources :nodes, :member => { :children => :get }

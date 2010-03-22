@@ -1,10 +1,11 @@
 class TestprojectsController < ApplicationController
-  menu_item :specification, :only => :index
-  menu_item :result, :only => :show
+  menu_item :projects, :only => :index
+  menu_item :overview, :only => :show
   # GET /testprojects
   # GET /testprojects.xml
   def index
-    @testprojects = Testproject.all
+    @testprojects = Testproject.find(:all, :conditions => "id > 0")
+    p "testprojectscontroller", @testprojects
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @testprojects }

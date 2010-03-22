@@ -1,8 +1,19 @@
-<div id="treeDiv"></div>
-
-<script type="text/javascript">
-Ext.onReady(makeTree);
-</script>
-
-<%= link_to 'New testproject', new_testproject_path %>
-
+<h2><%= l(:label_projects) %></h2>
+<table>
+  <tr>
+    <th><%= l(:label_name) %></th>
+    <th><%= l(:label_notes) %></th>
+  </tr>
+<% @testprojects.each do |testproject| %>
+  <% p testproject -%>
+  <tr>
+    <td>
+      <%= link_to testproject.name, {:action => "show",
+                                     :id => testproject.id}
+      %>
+    </td>
+    <td><%= testproject.notes %></td>
+  </tr>
+<% end %>
+</table>
+<% html_title(l(:label_projects)) -%>

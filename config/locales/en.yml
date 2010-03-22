@@ -123,6 +123,10 @@ en:
   general_pdf_encoding: ISO-8859-1
   general_first_day_of_week: '7'
 
+  label_home: 'home'
+  label_help: 'help'
+  label_overview: 'overview'
+  label_projects: 'projects'
   label_specification: 'specification'
   label_testplan: 'testplan'
   label_result: 'result'

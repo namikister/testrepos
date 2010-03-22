@@ -150,6 +150,16 @@ ja:
   general_pdf_encoding: CP932
   general_first_day_of_week: '7'
 
+  label_home: 'ホーム'
+  label_help: 'ヘルプ'
+  label_overview: '概要'
+  label_projects: 'プロジェクト'
   label_specification: '仕様'
   label_testplan: 'テスト計画'
   label_result: 'テスト結果'
+
+  label_name: '名前'
+  label_notes: '説明'
+  label_summary: '要約'
+  label_steps: 'ステップ'
+  label_expected_results: '期待結果'
