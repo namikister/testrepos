@@ -15,9 +15,9 @@ end
 #   menu.push :logout, :signout_path, :if => Proc.new { User.current.logged? }
 # end
 
-# Testrepos::MenuManager.map :application_menu do |menu|
-#   # Empty
-# end
+Testrepos::MenuManager.map :application_menu do |menu|
+  # Empty
+end
 
 Testrepos::MenuManager.map :admin_menu do |menu|
   # Empty

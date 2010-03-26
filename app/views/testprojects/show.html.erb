@@ -1,8 +1,3 @@
-<p>
-  <b>Notes:</b>
-  <%=h @testproject.notes %>
-</p>
-
-
-<%= link_to 'Edit', edit_testproject_path(@testproject) %> |
-<%= link_to 'Back', testprojects_path %>
+<h2><%= l(:label_overview) %></h2>
+<h3><%= @testproject.name %></h3>
+<p><%= @testproject.notes %></p>

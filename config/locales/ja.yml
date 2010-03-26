@@ -163,3 +163,6 @@ ja:
   label_summary: '要約'
   label_steps: 'ステップ'
   label_expected_results: '期待結果'
+
+  notice_file_not_found: 'アクセスしようとしたページは存在しないか削除されています。'
+  notice_not_authorized: 'このページにアクセスするには認証が必要です。'

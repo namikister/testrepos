@@ -1,12 +1,12 @@
 <h2><%= l(:label_projects) %></h2>
-<table>
-  <tr>
+<table class="list">
+  <thead><tr>
     <th><%= l(:label_name) %></th>
     <th><%= l(:label_notes) %></th>
-  </tr>
+  </thead></tr>
 <% @testprojects.each do |testproject| %>
   <% p testproject -%>
-  <tr>
+  <tr class="<%= cycle("odd", "even") %>">
     <td>
       <%= link_to testproject.name, {:action => "show",
                                      :id => testproject.id}
