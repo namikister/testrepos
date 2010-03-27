@@ -19,6 +19,24 @@ module ApplicationHelper
     end
   end
 
+  def render_plan_select_box(project)
+    # Retrieve them now to avoid a COUNT query
+    if project && !project.new_record?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+          "<option value='' selected='selected'>#{ l(:label_select_a_plan) }</option>" +
+          '<option value="" disabled="disabled">---</option>'
+      testplans = Testplan.find(:all, :conditions => "testproject_id = #{project.id}")
+      if testplans.any?
+        testplans.each do |testplan|
+          tag_options = { :value => url_for(:controller => 'testplans', :action => 'show', :id => testplan.id, :jump => current_menu_item)}
+          s << content_tag('option', h(testplan.name), tag_options)
+        end
+      end
+      s << '</select>'
+      s
+    end
+  end
+
   def page_header_title
     if @testproject.nil? || @testproject.new_record?
       h(Testrepos::Info.app_name)

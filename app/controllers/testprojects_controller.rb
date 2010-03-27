@@ -5,7 +5,7 @@ class TestprojectsController < ApplicationController
   # GET /testprojects.xml
   def index
     @testprojects = Testproject.find(:all, :conditions => "id > 0")
-    p "testprojectscontroller", @testprojects
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @testprojects }

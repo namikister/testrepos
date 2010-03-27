@@ -1,12 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
-  map.home '', :controller => 'home'
+#  map.home '', :controller => 'home'
 
   # map.signin 'login', :controller => 'account', :action => 'login'
   # map.signout 'logout', :controller => 'account', :action => 'logout'
-
+  map.resources :home
+  map.resources :help
   map.resources :specification
   map.resources :testsuites
   map.resources :testprojects
+  map.resources :testplans
   map.resources :nodes, :member => { :children => :get }
 
   # The priority is based upon order of creation: first created -> highest priority.

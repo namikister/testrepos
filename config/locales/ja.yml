@@ -165,6 +165,7 @@ ja:
   label_expected_results: '期待結果'
 
   label_jump_to_a_project: 'プロジェクトへ移動...'
+  label_select_a_plan: 'テスト計画の選択...'
 
   notice_file_not_found: 'アクセスしようとしたページは存在しないか削除されています。'
   notice_not_authorized: 'このページにアクセスするには認証が必要です。'
