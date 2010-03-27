@@ -2,6 +2,24 @@
 module ApplicationHelper
   include Testrepos::I18n
 
+  # Renders the project quick-jump box
+  def render_project_jump_box
+    # Retrieve them now to avoid a COUNT query
+    testprojects = Testproject.find(:all, :conditions => "id > 0")
+    if testprojects.any?
+      s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
+            "<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
+            '<option value="" disabled="disabled">---</option>'
+      testprojects.each do |testproject|
+        tag_options = { :value => url_for(:controller => 'testprojects', :action => 'show', :id => testproject.id, :jump => current_menu_item),
+                        :selected => ((@testproject == testproject) ? 'selected' : nil) }
+        s << content_tag('option', h(testproject.name), tag_options)
+      end
+      s << '</select>'
+      s
+    end
+  end
+
   def page_header_title
     if @testproject.nil? || @testproject.new_record?
       h(Testrepos::Info.app_name)
