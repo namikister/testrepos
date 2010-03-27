@@ -8,11 +8,10 @@ module ApplicationHelper
     testprojects = Testproject.find(:all, :conditions => "id > 0")
     if testprojects.any?
       s = '<select onchange="if (this.value != \'\') { window.location = this.value; }">' +
-            "<option value=''>#{ l(:label_jump_to_a_project) }</option>" +
+            "<option value='' selected='selected'>#{ l(:label_jump_to_a_project) }</option>" +
             '<option value="" disabled="disabled">---</option>'
       testprojects.each do |testproject|
-        tag_options = { :value => url_for(:controller => 'testprojects', :action => 'show', :id => testproject.id, :jump => current_menu_item),
-                        :selected => ((@testproject == testproject) ? 'selected' : nil) }
+        tag_options = { :value => url_for(:controller => 'testprojects', :action => 'show', :id => testproject.id, :jump => current_menu_item)}
         s << content_tag('option', h(testproject.name), tag_options)
       end
       s << '</select>'
