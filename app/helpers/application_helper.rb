@@ -11,7 +11,7 @@ module ApplicationHelper
             "<option value='' selected='selected'>#{ l(:label_jump_to_a_project) }</option>" +
             '<option value="" disabled="disabled">---</option>'
       testprojects.each do |testproject|
-        tag_options = { :value => url_for(:controller => 'testprojects', :action => 'show', :id => testproject.id, :jump => current_menu_item)}
+        tag_options = {:value => url_for(:controller => 'testprojects', :action => 'show', :id => testproject.id)}
         s << content_tag('option', h(testproject.name), tag_options)
       end
       s << '</select>'
@@ -28,7 +28,7 @@ module ApplicationHelper
       testplans = Testplan.find(:all, :conditions => "testproject_id = #{project.id}")
       if testplans.any?
         testplans.each do |testplan|
-          tag_options = { :value => url_for(:controller => 'testplans', :action => 'show', :id => testplan.id, :project_id => project.id, :jump => current_menu_item)}
+          tag_options = { :value => url_for(:controller => 'testplans', :action => 'show', :plan_id => testplan.id, :id => project.id)}
           s << content_tag('option', h(testplan.name), tag_options)
         end
       end

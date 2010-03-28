@@ -13,10 +13,10 @@ ActionController::Routing::Routes.draw do |map|
 #  map.resources :testplans, :member => { :children => :get }
   map.with_options :controller => 'testplans' do |plan_routes|
     plan_routes.with_options :conditions => {:method => :get} do |plan_get|
-      prefix = 'testprojects/:project_id/testplans'
-      plan_get.connect prefix,                   :action => 'index'
-      plan_get.connect prefix + '/:id',          :action => 'show'
-      plan_get.connect prefix + '/:id/children.:format', :action => 'children'
+      prefix = 'testprojects/:id/testplans'
+      plan_get.connect prefix, :action => 'index'
+      plan_get.connect prefix + '/:plan_id', :action => 'show'
+      plan_get.connect prefix + '/:plan_id/children.:format', :action => 'children'
     end
   end
 
