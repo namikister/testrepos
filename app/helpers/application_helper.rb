@@ -28,7 +28,7 @@ module ApplicationHelper
       testplans = Testplan.find(:all, :conditions => "testproject_id = #{project.id}")
       if testplans.any?
         testplans.each do |testplan|
-          tag_options = { :value => url_for(:controller => 'testplans', :action => 'show', :id => testplan.id, :jump => current_menu_item)}
+          tag_options = { :value => url_for(:controller => 'testplans', :action => 'show', :id => testplan.id, :project_id => project.id, :jump => current_menu_item)}
           s << content_tag('option', h(testplan.name), tag_options)
         end
       end

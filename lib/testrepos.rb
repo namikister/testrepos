@@ -27,6 +27,6 @@ end
 Testrepos::MenuManager.map :project_menu do |menu|
   menu.push :overview, { :controller => 'testprojects', :action => 'show' }
   menu.push :specification, { :controller => 'specification', :action => 'show' }
-  menu.push :testplan, { :controller => 'testplans', :action => 'show' }
+#  menu.push :testplan, { :controller => 'testplans', :action => 'show' }
   menu.push :result, { :controller => 'testprojects', :action => 'show' }
 end

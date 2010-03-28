@@ -17,7 +17,11 @@ Ext.onReady(makeTree(<%= @testproject.id %>,
                        header:'<%= l(:label_expected_results) %>',
                        width:300,
                        dataIndex:'expected_results'
-                      }]));
+                      }],
+                     function(obj){
+                       return '/nodes/' + obj.argument.node.id + '/children.json';
+                     }
+                    ));
 </script>
 
 <div class="hide"><%= html_title l(:label_specification)  %></div>

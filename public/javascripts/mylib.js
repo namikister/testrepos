@@ -1,6 +1,6 @@
 //Ext.BLANK_IMAGE_URL = '/ext-3.1.0/resources/images/default/s.gif';
 
-var makeTree = function (id, columns) {
+var makeTree = function (id, columns, dataUrl) {
     var tree = new Ext.ux.tree.ColumnTree({
         rootVisible:false,
         autoScroll:false,
@@ -13,9 +13,7 @@ var makeTree = function (id, columns) {
         columns: columns,
 
         loader: new Ext.tree.TreeLoader({
-            dataUrl:function(obj){
-                return '/nodes/' + obj.argument.node.id + '/children.json';
-            },
+            dataUrl: dataUrl,
             requestMethod:'GET',
             nodeParameter:'id',
             baseAttrs:{

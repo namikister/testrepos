@@ -8,8 +8,17 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :specification
   map.resources :testsuites
   map.resources :testprojects
-  map.resources :testplans
   map.resources :nodes, :member => { :children => :get }
+
+#  map.resources :testplans, :member => { :children => :get }
+  map.with_options :controller => 'testplans' do |plan_routes|
+    plan_routes.with_options :conditions => {:method => :get} do |plan_get|
+      prefix = 'testprojects/:project_id/testplans'
+      plan_get.connect prefix,                   :action => 'index'
+      plan_get.connect prefix + '/:id',          :action => 'show'
+      plan_get.connect prefix + '/:id/children.:format', :action => 'children'
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -50,6 +59,7 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+
+  # map.connect ':controller/:action/:id'
+  # map.connect ':controller/:action/:id.:format'
 end
