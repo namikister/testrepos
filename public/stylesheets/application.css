@@ -11,8 +11,9 @@ h4, .wiki h3 {font-size: 13px;padding: 2px 10px 1px 0px;margin-bottom: 5px; bord
 /***** Layout *****/
 #wrapper {background: white;}
 
-#top-menu {background: #2C4056; color: #fff; height:1.8em; font-size: 0.8em; padding: 2px 2px 0px 6px;}
-#top-menu ul {margin: 0;  padding: 0;}
+/* #top-menu {background-image:url(/images/top_back.png); background-repeat:repeat-x; color: #000; height:1.8em; font-size: 0.8em; padding: 2px 8px 0px 6px;} */
+#top-menu {background: #ddd; color: #000; height:1.8em; font-size: 0.8em; padding: 2px 8px 0px 6px;}
+#top-menu ul {margin: 0; padding: 0;}
 #top-menu li {
   float:left;
   list-style-type:none;
@@ -20,12 +21,16 @@ h4, .wiki h3 {font-size: 13px;padding: 2px 10px 1px 0px;margin-bottom: 5px; bord
   padding: 0px 0px 0px 0px;
   white-space:nowrap;
 }
-#top-menu a {color: #fff; margin-right: 8px; font-weight: bold;}
-#top-menu #loggedas { float: right; margin-right: 0.5em; color: #fff; }
+#top-menu a {margin-right: 8px; font-weight: bold; color: #000}
+#top-menu #loggedas { float: right; margin-right: 0.5em; }
 
 #account {float:right;}
 
-#header {height:4.5em;margin:0;background-color:#305080;color:#f8f8f8; padding: 4px 8px 0px 6px; position:relative;}
+#top-menu select {font-size:100%;}
+.right {float:right; margin-right: 5px}
+
+#header {height:4.5em;margin:0; background-image:url(/images/header_back.png); background-repeat:repeat-x; color:#000000; padding: 4px 8px 0px 6px; position:relative;}
+/* #header {height:4.5em;margin:0;background-color:#305080;color:#f8f8f8; padding: 4px 8px 0px 6px; position:relative;} */
 #header a {color:#f8f8f8;}
 #header h1 a.ancestor { font-size: 80%; }
 #quick-search {float:right;}
@@ -41,14 +46,14 @@ h4, .wiki h3 {font-size: 13px;padding: 2px 10px 1px 0px;margin-bottom: 5px; bord
 }
 #main-menu li a {
   display: block;
-  color: #fff;
+  color: #000;
   text-decoration: none;
-  font-weight: bold;
   margin: 0;
   padding: 4px 10px 4px 10px;
 }
-#main-menu li a:hover {background:#759FCF; color:#fff;}
-#main-menu li a.selected, #main-menu li a.selected:hover {background:#fff; color:#555;}
+#main-menu li a:hover {background:#F0F0F0; color:#000; font-weight: bold;}
+/* #main-menu li a:hover {background:#759FCF; color:#fff;} */
+#main-menu li a.selected, #main-menu li a.selected:hover {background:#fff; color:#555; font-weight: bold;}
 
 #admin-menu ul {margin: 0;  padding: 0;}
 #admin-menu li {margin: 0;  padding: 0 0 12px 0; list-style-type:none;}

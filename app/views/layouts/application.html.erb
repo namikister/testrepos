@@ -17,40 +17,40 @@
 <%= yield :header_tags -%>
 </head>
 <body>
-<div id="wrapper">
-<div id="top-menu">
-    <div id="account">
-      <%= render_menu :account_menu -%>
+  <div id="wrapper">
+    <div id="top-menu">
+      <div id="top-right" class="right">
+        <%= render_menu :account_menu -%>
+        <%= render_project_jump_box %>
+      </div>
+      <%= render_menu :top_menu -%>
     </div>
-    <%= render_menu :top_menu -%>
-</div>
-<div id="header">
-    <div id="quick-search">
-      <%= render_project_jump_box %>
-      <%= render_plan_select_box(@testproject) %>
+    <div id="header">
+      <div id="quick-search" class="right">
+        <%= render_plan_select_box(@testproject) %>
+      </div>
+      <h1><%= page_header_title %></h1>
+      <div id="main-menu">
+        <%= render_main_menu(@testproject) -%>
+      </div>
     </div>
-    <h1><%= page_header_title %></h1>
-    <div id="main-menu">
-      <%= render_main_menu(@testproject) -%>
-    </div>
-</div>
 
-<% if defined?(@content_for_sidebar) %>
-  <div id="sidebar">
-    <%= yield :sidebar %>
+    <% if defined?(@content_for_sidebar) %>
+      <div id="sidebar">
+        <%= yield :sidebar %>
+      </div>
+    <% end %>
+    <div id="content">
+      <%= yield %>
+      <div style="clear:both;"></div>
+    </div>
+
+    <div id="ajax-indicator" style="display:none;"><span><%# l(:label_loading) %></span></div>
+
+    <div id="footer">
+      Powered by <%# link_to Testrepos::Info.app_name, Testrepos::Info.url %> &copy; 2010 Yuta Namiki
+    </div>
   </div>
-<% end %>
-<div id="content">
-  <%= yield %>
-  <div style="clear:both;"></div>
-</div>
-
-<div id="ajax-indicator" style="display:none;"><span><%# l(:label_loading) %></span></div>
-
-<div id="footer">
-    Powered by <%# link_to Testrepos::Info.app_name, Testrepos::Info.url %> &copy; 2010 Yuta Namiki
-</div>
-</div>
-<%# call_hook :view_layouts_base_body_bottom %>
+  <%# call_hook :view_layouts_base_body_bottom %>
 </body>
 </html>
