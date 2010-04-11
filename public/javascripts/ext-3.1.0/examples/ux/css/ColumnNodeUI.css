@@ -64,3 +64,10 @@
     border-left:1px solid #eee;
     border-right:1px solid #d0d0d0;
 }
+
+.x-tree-col-border {
+    border-color: #ccc;
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+}
+

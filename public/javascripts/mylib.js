@@ -6,7 +6,7 @@ var makeTree = function (id, columns, dataUrl) {
         autoScroll:false,
         renderTo: 'treeDiv',
         header: false,
-        border: false,
+        border: true,
 //        height: 600,
 //        title: 'Specification',
 

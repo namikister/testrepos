@@ -220,6 +220,7 @@ Ext.ux.tree.ColumnTree = Ext.extend(Ext.tree.TreePanel, {
     setWidthAllNodes : function(index, width) {
         var i = index,
             w = width - this.borderWidth;
+        if (this.border) w -= 1;
         this.doAllNodes(this.getRootNode(),
                         function(node) {
                             node.ui.elNode.children[i].style.width = w + "px";
@@ -256,10 +257,13 @@ Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
         var bw = t.borderWidth;
         var c = cols[0];
         var cb = Ext.isBoolean(a.checked);
+        var border = t.border ? " x-tree-col-border" : "";
+        if (t.border) bw += 1;
+        var width = c.width-bw;
 
         var buf = [
              '<li class="x-tree-node"><div ext:tree-node-id="',n.id,'" class="x-tree-node-el x-tree-node-leaf ', a.cls,'">',
-                '<div class="x-tree-col" style="width:',c.width-bw,'px;">',
+                '<div class="x-tree-col ', border, '" style="width:',width,'px;">',
                     '<span class="x-tree-node-indent">',this.indentMarkup,"</span>",
                     '<img src="', this.emptyIcon, '" class="x-tree-ec-icon x-tree-elbow">',
                     '<img src="', a.icon || this.emptyIcon, '" class="x-tree-node-icon',(a.icon ? " x-tree-node-inline-icon" : ""),(a.iconCls ? " "+a.iconCls : ""),'" unselectable="on">',
@@ -270,8 +274,9 @@ Ext.ux.tree.ColumnNodeUI = Ext.extend(Ext.tree.TreeNodeUI, {
                 "</div>"];
          for(var i = 1, len = cols.length; i < len; i++){
              c = cols[i];
+             width = c.width-bw;
 
-             buf.push('<div class="x-tree-col ',(c.cls?c.cls:''),'" style="width:',c.width-bw,'px;">',
+             buf.push('<div class="x-tree-col ',(c.cls?c.cls:''),border,'" style="width:',width,'px;">',
                         '<div class="x-tree-col-text">',(c.renderer ? c.renderer(a[c.dataIndex], n, a) : a[c.dataIndex]),"</div>",
                       "</div>");
          }
